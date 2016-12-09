@@ -1,0 +1,58 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="/webjars/bootstrap/3.3.6/css/bootstrap.css">
+<link rel="stylesheet" href="/css/app.css">
+<title>Twitter Search</title>
+</head>
+
+<body>
+	<h1>Twitter Search</h1>
+
+	<div id="container" ng-app="app" ng-controller="searchController">
+		<div id="tweetForm">
+			<form name="searchForm" ng-submit="submitQuery()">
+				<input name="queryKey" class="searchBox" type="text" ng-model="queryKey" autofocus/> 
+				<br> 
+				<label><input type="radio" ng-model="indexType" value="lucene"/>Lucene Index</label> 
+				<label><input type="radio" ng-model="indexType" value="hadoop"/>Hadoop Index</label> 
+				<br> 
+				<input type="submit" value="Search"/>
+				<br>
+			</form>
+		</div>
+		<div id="tweetResults">
+			<div ng:repeat="tweet in tweets | startFrom:currentPage*pageSize | limitTo:pageSize">
+					<div id="tweetBox">
+						<p>
+							{{tweet.userName}} <br>{{tweet.name}} 
+							<br>{{tweet.status}} <br>Location {{tweet.location}}<br>#Followers {{tweet.followers}}
+						</p>
+					</div>
+					<br>
+			</div>
+			<button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+					Previous
+			</button>
+			{{currentPage+1}}/{{numberOfPages()}}
+    		<button ng-disabled="currentPage >= tweets.length/pageSize - 1" ng-click="currentPage=currentPage+1">
+        		Next
+    		</button>
+    	</div>
+    	<div id="map_canvas">
+			<ui-gmap-google-map center="map.center" zoom="map.zoom"
+				draggable="true" events="map.events"> <ui-gmap-marker
+				ng-repeat="m in map.markers" coords="m.coords" icon="m.icon"
+				idkey="m.id"></ui-gmap-marker> </ui-gmap-google-map>
+		</div>
+	</div>
+	<script src="/webjars/angularjs/1.4.9/angular.js"></script>
+	<script src="/webjars/angularjs/1.4.9/angular-resource.js"></script>
+	<script src="/webjars/angularjs/1.4.9/angular-route.js"></script>
+	<script src="js/lodash.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/controller.js"></script>
+	<script src="js/angular-google-maps.min.js"></script>
+	<script src="js/angular-simple-logger.js"></script>
+</body>
+</html>
